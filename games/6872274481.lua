@@ -1822,7 +1822,7 @@ run(function()
 			end
 		end,
 		ExtraText = function()
-			return 'Heatseeker'
+			return 'Cframe'
 		end,
 		Tooltip = 'Makes you go zoom.'
 	})
@@ -2136,7 +2136,7 @@ run(function()
 			end
 		end,
 		ExtraText = function() 
-			return 'Heatseeker' 
+			return 'Cframe' 
 		end,
 		Tooltip = 'Makes you go zoom.'
 	})
@@ -2872,7 +2872,7 @@ run(function()
 			end
 		end,
 		ExtraText = function()
-			return 'Heatseeker'
+			return 'Cframe'
 		end,
 		Tooltip = 'Lets you jump farther'
 	})
@@ -3189,7 +3189,7 @@ run(function()
 			end
 		end,
 		ExtraText = function()
-			return 'Heatseeker'
+			return 'Cframe'
 		end,
 		Tooltip = 'Increases your movement with various methods.'
 	})
