@@ -3281,33 +3281,7 @@ run(function()
 	})
 end)
 	
-run(function()
-	local Health
-	
-	Health = vape.Categories.Render:CreateModule({
-		Name = 'Health',
-		Function = function(callback)
-			if callback then
-				local label = Instance.new('TextLabel')
-				label.Size = UDim2.fromOffset(100, 20)
-				label.Position = UDim2.new(0.5, 6, 0.5, 30)
-				label.BackgroundTransparency = 1
-				label.AnchorPoint = Vector2.new(0.5, 0)
-				label.Text = entitylib.isAlive and math.round(lplr.Character:GetAttribute('Health'))..' ❤️' or ''
-				label.TextColor3 = entitylib.isAlive and Color3.fromHSV((lplr.Character:GetAttribute('Health') / lplr.Character:GetAttribute('MaxHealth')) / 2.8, 0.86, 1) or Color3.new()
-				label.TextSize = 18
-				label.Font = Enum.Font.Arial
-				label.Parent = vape.gui
-				Health:Clean(label)
-				Health:Clean(vapeEvents.AttributeChanged.Event:Connect(function()
-					label.Text = entitylib.isAlive and math.round(lplr.Character:GetAttribute('Health'))..' ❤️' or ''
-					label.TextColor3 = entitylib.isAlive and Color3.fromHSV((lplr.Character:GetAttribute('Health') / lplr.Character:GetAttribute('MaxHealth')) / 2.8, 0.86, 1) or Color3.new()
-				end))
-			end
-		end,
-		Tooltip = 'Displays your health in the center of your screen.'
-	})
-end)
+ 
 	
 run(function()
 	local KitESP
@@ -3986,44 +3960,7 @@ run(function()
 		Darker = true
 	})
 end)
-	
-run(function()
-	local AutoBalloon
-	
-	AutoBalloon = vape.Categories.Utility:CreateModule({
-		Name = 'AutoBalloon',
-		Function = function(callback)
-			if callback then
-				repeat task.wait() until store.matchState ~= 0 or (not AutoBalloon.Enabled)
-				if not AutoBalloon.Enabled then return end
-	
-				local lowestpoint = math.huge
-				for _, v in store.blocks do
-					local point = (v.Position.Y - (v.Size.Y / 2)) - 50
-					if point < lowestpoint then 
-						lowestpoint = point 
-					end
-				end
-	
-				repeat
-					if entitylib.isAlive then
-						if entitylib.character.RootPart.Position.Y < lowestpoint and (lplr.Character:GetAttribute('InflatedBalloons') or 0) < 3 then
-							local balloon = getItem('balloon')
-							if balloon then
-								for _ = 1, 3 do 
-									bedwars.BalloonController:inflateBalloon() 
-								end
-							end
-							task.wait(0.1)
-						end
-					end
-					task.wait(0.1)
-				until not AutoBalloon.Enabled
-			end
-		end,
-		Tooltip = 'Inflates when you fall into the void'
-	})
-end)
+
 	
 run(function()
 	local AutoKit
@@ -4421,64 +4358,7 @@ run(function()
 		})
 	end
 end)
-	
-run(function()
-	local AutoPearl
-	local rayCheck = RaycastParams.new()
-	rayCheck.RespectCanCollide = true
-	local projectileRemote = {InvokeServer = function() end}
-	task.spawn(function()
-		projectileRemote = bedwars.Client:Get(remotes.FireProjectile).instance
-	end)
-	
-	local function firePearl(pos, spot, item)
-		switchItem(item.tool)
-		local meta = bedwars.ProjectileMeta.telepearl
-		local calc = prediction.SolveTrajectory(pos, meta.launchVelocity, meta.gravitationalAcceleration, spot, Vector3.zero, workspace.Gravity, 0, 0)
-	
-		if calc then
-			local dir = CFrame.lookAt(pos, calc).LookVector * meta.launchVelocity
-			bedwars.ProjectileController:createLocalProjectile(meta, 'telepearl', 'telepearl', pos, nil, dir, {drawDurationSeconds = 1})
-			projectileRemote:InvokeServer(item.tool, 'telepearl', 'telepearl', pos, pos, dir, httpService:GenerateGUID(true), {drawDurationSeconds = 1, shotId = httpService:GenerateGUID(false)}, workspace:GetServerTimeNow() - 0.045)
-		end
-	
-		if store.hand then
-			switchItem(store.hand.tool)
-		end
-	end
-	
-	AutoPearl = vape.Categories.Utility:CreateModule({
-		Name = 'AutoPearl',
-		Function = function(callback)
-			if callback then
-				local check
-				repeat
-					if entitylib.isAlive then
-						local root = entitylib.character.RootPart
-						local pearl = getItem('telepearl')
-						rayCheck.FilterDescendantsInstances = {lplr.Character, gameCamera, AntiFallPart}
-						rayCheck.CollisionGroup = root.CollisionGroup
-	
-						if pearl and root.Velocity.Y < -100 and not workspace:Raycast(root.Position, Vector3.new(0, -200, 0), rayCheck) then
-							if not check then
-								check = true
-								local ground = getNearGround(20)
-	
-								if ground then
-									firePearl(root.Position, ground, pearl)
-								end
-							end
-						else
-							check = false
-						end
-					end
-					task.wait(0.1)
-				until not AutoPearl.Enabled
-			end
-		end,
-		Tooltip = 'Automatically throws a pearl onto nearby ground after\nfalling a certain distance.'
-	})
-end)
+	 
 	
 run(function()
 	local AutoPlay
@@ -4664,102 +4544,7 @@ run(function()
 		})
 	end
 end)
-	
-run(function()
-	local AutoVoidDrop
-	local OwlCheck
-	
-	AutoVoidDrop = vape.Categories.Utility:CreateModule({
-		Name = 'AutoVoidDrop',
-		Function = function(callback)
-			if callback then
-				repeat task.wait() until store.matchState ~= 0 or (not AutoVoidDrop.Enabled)
-				if not AutoVoidDrop.Enabled then return end
-	
-				local lowestpoint = math.huge
-				for _, v in store.blocks do
-					local point = (v.Position.Y - (v.Size.Y / 2)) - 50
-					if point < lowestpoint then
-						lowestpoint = point
-					end
-				end
-	
-				repeat
-					if entitylib.isAlive then
-						local root = entitylib.character.RootPart
-						if root.Position.Y < lowestpoint and (lplr.Character:GetAttribute('InflatedBalloons') or 0) <= 0 and not getItem('balloon') then
-							if not OwlCheck.Enabled or not root:FindFirstChild('OwlLiftForce') then
-								for _, item in {'iron', 'diamond', 'emerald', 'gold'} do
-									item = getItem(item)
-									if item then
-										item = bedwars.Client:Get(remotes.DropItem):CallServer({
-											item = item.tool,
-											amount = item.amount
-										})
-	
-										if item then
-											item:SetAttribute('ClientDropTime', tick() + 100)
-										end
-									end
-								end
-							end
-						end
-					end
-	
-					task.wait(0.1)
-				until not AutoVoidDrop.Enabled
-			end
-		end,
-		Tooltip = 'Drops resources when you fall into the void'
-	})
-	OwlCheck = AutoVoidDrop:CreateToggle({
-		Name = 'Owl check',
-		Default = true,
-		Tooltip = 'Refuses to drop items if being picked up by an owl'
-	})
-end)
-	
-run(function()
-	local MissileTP
-	
-	MissileTP = vape.Categories.Utility:CreateModule({
-		Name = 'MissileTP',
-		Function = function(callback)
-			if callback then
-				MissileTP:Toggle()
-				local plr = entitylib.EntityMouse({
-					Range = 1000,
-					Players = true,
-					Part = 'RootPart'
-				})
-	
-				if getItem('guided_missile') and plr then
-					local projectile = bedwars.RuntimeLib.await(bedwars.GuidedProjectileController.fireGuidedProjectile:CallServerAsync('guided_missile'))
-					if projectile then
-						local projectilemodel = projectile.model
-						if not projectilemodel.PrimaryPart then
-							projectilemodel:GetPropertyChangedSignal('PrimaryPart'):Wait()
-						end
-	
-						local bodyforce = Instance.new('BodyForce')
-						bodyforce.Force = Vector3.new(0, projectilemodel.PrimaryPart.AssemblyMass * workspace.Gravity, 0)
-						bodyforce.Name = 'AntiGravity'
-						bodyforce.Parent = projectilemodel.PrimaryPart
-	
-						repeat
-							projectile.model:SetPrimaryPartCFrame(CFrame.lookAlong(plr.RootPart.CFrame.p, gameCamera.CFrame.LookVector))
-							task.wait(0.1)
-						until not projectile.model or not projectile.model.Parent
-					else
-						notif('MissileTP', 'Missile on cooldown.', 3)
-					end
-				end
-			end
-		end,
-		Tooltip = 'Spawns and teleports a missile to a player\nnear your mouse.'
-	})
-end)
-	
+	 
 run(function()
 	local PickupRange
 	local Range
@@ -4822,48 +4607,7 @@ run(function()
 	})
 	Lower = PickupRange:CreateToggle({Name = 'Feet Check'})
 end)
-	
-run(function()
-	local RavenTP
-	
-	RavenTP = vape.Categories.Utility:CreateModule({
-		Name = 'RavenTP',
-		Function = function(callback)
-			if callback then
-				RavenTP:Toggle()
-				local plr = entitylib.EntityMouse({
-					Range = 1000,
-					Players = true,
-					Part = 'RootPart'
-				})
-	
-				if getItem('raven') and plr then
-					bedwars.Client:Get(remotes.SpawnRaven):CallServerAsync():andThen(function(projectile)
-						if projectile then
-							local bodyforce = Instance.new('BodyForce')
-							bodyforce.Force = Vector3.new(0, projectile.PrimaryPart.AssemblyMass * workspace.Gravity, 0)
-							bodyforce.Parent = projectile.PrimaryPart
-	
-							if plr then
-								task.spawn(function()
-									for _ = 1, 20 do
-										if plr.RootPart and projectile then
-											projectile:SetPrimaryPartCFrame(CFrame.lookAlong(plr.RootPart.Position, gameCamera.CFrame.LookVector))
-										end
-										task.wait(0.05)
-									end
-								end)
-								task.wait(0.3)
-								bedwars.RavenController:detonateRaven()
-							end
-						end
-					end)
-				end
-			end
-		end,
-		Tooltip = 'Spawns and teleports a raven to a player\nnear your mouse.'
-	})
-end)
+	 
 	
 run(function()
 	local Scaffold
@@ -5241,7 +4985,7 @@ run(function()
 end)
 	
 run(function()
-	vape.Categories.World:CreateModule({
+	vape.Legit:CreateModule({
 		Name = 'Anti-AFK',
 		Function = function(callback)
 			if callback then
@@ -6902,7 +6646,7 @@ run(function()
 				until not FastDrop.Enabled
 			end
 		end,
-		Tooltip = 'Drops items fast when you hold Q'
+		Tooltip = 'Drops items fast when you hold H'
 	})
 end)
 	
@@ -7338,8 +7082,8 @@ run(function()
 				debug.setconstant(bedwars.ViewmodelController.show, 25, Image.Value)
 				debug.setconstant(bedwars.ViewmodelController.show, 37, Image.Value)
 			else
-				debug.setconstant(bedwars.ViewmodelController.show, 25, old)
-				debug.setconstant(bedwars.ViewmodelController.show, 37, old)
+				debug.setconstant(bedwars.ViewmodelController.show, 25, 25)
+				debug.setconstant(bedwars.ViewmodelController.show, 37, 25)
 				old = nil 
 			end
 			if bedwars.CameraPerspectiveController:getCameraPerspective() == 0 then
@@ -7607,7 +7351,7 @@ run(function()
 end)
 	
 run(function()
-	vape.Legit:CreateModule({
+	 vape.Categories.Combat:CreateModule({
 		Name = 'HitFix',
 		Function = function(callback)
 			debug.setconstant(bedwars.SwordController.swingSwordAtMouse, 23, callback and 'raycast' or 'Raycast')
@@ -8336,39 +8080,4 @@ run(function()
 		end
 	})
 end)
-	
-run(function()
-	local WinEffect
-	local List
-	local NameToId = {}
-	
-	WinEffect = vape.Legit:CreateModule({
-		Name = 'WinEffect',
-		Function = function(callback)
-			if callback then
-				WinEffect:Clean(vapeEvents.MatchEndEvent.Event:Connect(function()
-					for i, v in getconnections(bedwars.Client:Get('WinEffectTriggered').instance.OnClientEvent) do
-						if v.Function then
-							v.Function({
-								winEffectType = NameToId[List.Value],
-								winningPlayer = lplr
-							})
-						end
-					end
-				end))
-			end
-		end,
-		Tooltip = 'Allows you to select any clientside win effect'
-	})
-	local WinEffectName = {}
-	for i, v in bedwars.WinEffectMeta do
-		table.insert(WinEffectName, v.name)
-		NameToId[v.name] = i
-	end
-	table.sort(WinEffectName)
-	List = WinEffect:CreateDropdown({
-		Name = 'Effects',
-		List = WinEffectName
-	})
-end)
-	
+ 
