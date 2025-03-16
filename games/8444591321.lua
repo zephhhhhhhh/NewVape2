@@ -41,5 +41,3 @@ else
 		end
 	end
 end
-	
---- NEW MODULES ---
