@@ -23,18 +23,22 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/onlyabletolove/NewVap
 
 ## 👨‍💻 Developers
 
-[ILiekCarot](https://github.com/ILiekCarot) - Maintainer
 
-[Isloving](https://github.com/onlyabletolove) - Lead Developer
+
+[Zeph](https://slat.cc/zephhh) - Lead Developer
+
+[Isloving](https://github.com/onlyabletolove) - Developer
+
 
 [Retro](https://github.com/robloxexploiterz) - Exploit Developer
 
-[Zeph](https://slat.cc/zephhh) - Kit Researcher
 
 <br/>
 
 ## 🙏 Credits
 
 [7GrandDad](https://github.com/7GrandDadPGN) - Original Founder
+
+[ILiekCarot](https://github.com/ILiekCarot) - NewVapeV2 Founder
 
 [Stav](https://github.com/sstvskids/VapeV4ForRoblox) - Found the base fixed remote/controller paths
