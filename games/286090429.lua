@@ -33,10 +33,9 @@ run(function()
         Name = "HitBox",
         Function = function(callback)
             if callback then
-                task.spawn(function()
-                    while callback do   
-                        task.wait(0.1)   
-                        for _, v in pairs(Players:GetPlayers()) do
+                repeat
+                   task.wait()   
+                         for _, v in pairs(Players:GetPlayers()) do
                             if v ~= lplr and v.Character then
                                 local parts = {"RightUpperLeg", "LeftUpperLeg", "HeadHB", "HumanoidRootPart"}
                                 for _, part in pairs(parts) do
