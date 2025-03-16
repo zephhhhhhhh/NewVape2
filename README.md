@@ -16,8 +16,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/onlyabletolove/NewVap
 <div align="center">
   
   [![Discord](https://img.shields.io/badge/Discord-Join%20Now-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/37PdRkKtG2)
-  [![YouTube](https://img.shields.io/badge/YouTube-Subscribe-FF0000?style=for-the-badge&logo=youtube&logoColor=white)]()
-  [![TikTok](https://img.shields.io/badge/TikTok-Follow-000000?style=for-the-badge&logo=tiktok&logoColor=white)]()
+  [![YouTube](https://img.shields.io/badge/YouTube-Subscribe-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@zephthecutie)
   
 </div>
 
