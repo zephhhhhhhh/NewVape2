@@ -1,3 +1,6 @@
+-- ARSENAL 
+
+
 local run = function(func) 
 	func() 
 end
@@ -22,10 +25,11 @@ local color = vape.Libraries.color
 local uipallet = vape.Libraries.uipallet
 local getcustomasset = vape.Libraries.getcustomasset
 
-for _, v in {'AnimationPlayer', 'Blink', 'Freecam', 'Disabler', 'ServerHop', 'SafeWalk', 'Parkour', 'FOV', 'ChatSpammer', 'HitBoxes', 'Killaura', 'MouseTP', 'LongJump', 'Reach', 'AutoClicker'} do
+for _, v in {'AnimationPlayer', 'Blink', 'Freecam', 'Disabler', 'ServerHop', 'SafeWalk', 'Parkour', 'HitBoxes', 'Killaura', 'Reach', 'AutoClicker'} do
     vape:Remove(v)
 end
 
+ 
 
 run(function()
     local HitBox
