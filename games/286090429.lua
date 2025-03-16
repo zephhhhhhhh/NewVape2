@@ -6,6 +6,7 @@ local cloneref = cloneref or function(obj)
 end
 
 local playersService = cloneref(game:GetService('Players'))
+local Players = game:GetService("Players")
 local inputService = cloneref(game:GetService('UserInputService'))
 local replicatedStorage = cloneref(game:GetService('ReplicatedStorage'))
 local runService = cloneref(game:GetService('RunService'))
@@ -23,28 +24,43 @@ local uipallet = vape.Libraries.uipallet
 local getcustomasset = vape.Libraries.getcustomasset
 
 
+
 run(function()
     local HitBox
-    local Players = game:GetService("Players")
-    local lplr = Players.LocalPlayer
     local size = 10   
-    
+
     HitBox = vape.Categories.Combat:CreateModule({
         Name = "HitBox",
         Function = function(callback)
             if callback then
-                while callback do
-                    task.wait()
-                    for _, v in pairs(Players:GetPlayers()) do
-                        if v ~= lplr and v.Character then
-                            local parts = {"RightUpperLeg", "LeftUpperLeg", "HeadHB", "HumanoidRootPart"}
-                            for _, part in pairs(parts) do
-                                local skib = v.Character:FindFirstChild(part)
-                                if skib then
-                                    skib.CanCollide = false
-                                    skib.Transparency = 1
-                                    skib.Size = Vector3.new(size, size, size)
+                task.spawn(function()
+                    while callback do
+                        task.wait()
+                        for _, v in pairs(Players:GetPlayers()) do
+                            if v ~= lplr and v.Character then
+                                local parts = {"RightUpperLeg", "LeftUpperLeg", "HeadHB", "HumanoidRootPart"}
+                                for _, part in pairs(parts) do
+                                    local skib = v.Character:FindFirstChild(part)
+                                    if skib then
+                                        skib.CanCollide = false
+                                        skib.Transparency = 1
+                                        skib.Size = Vector3.new(size, size, size)
+                                    end
                                 end
+                            end
+                        end
+                    end
+                end)
+            else
+                for _, v in pairs(Players:GetPlayers()) do
+                    if v ~= lplr and v.Character then
+                        local parts = {"RightUpperLeg", "LeftUpperLeg", "HeadHB", "HumanoidRootPart"}
+                        for _, part in pairs(parts) do
+                            local skib = v.Character:FindFirstChild(part)
+                            if skib then
+                                skib.CanCollide = true
+                                skib.Transparency = 0
+                                skib.Size = Vector3.new(1, 1, 1)
                             end
                         end
                     end
