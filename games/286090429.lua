@@ -6,7 +6,6 @@ local cloneref = cloneref or function(obj)
 end
 
 local playersService = cloneref(game:GetService('Players'))
-local Players = game:GetService("Players")
 local inputService = cloneref(game:GetService('UserInputService'))
 local replicatedStorage = cloneref(game:GetService('ReplicatedStorage'))
 local runService = cloneref(game:GetService('RunService'))
@@ -28,6 +27,7 @@ local getcustomasset = vape.Libraries.getcustomasset
 run(function()
     local HitBox
     local size = 10   
+    local Players = game:GetService("Players")
 
     HitBox = vape.Categories.Combat:CreateModule({
         Name = "HitBox",
