@@ -29,8 +29,7 @@ for _, v in {'AnimationPlayer', 'Blink', 'Freecam', 'Disabler', 'FOV', 'ServerHo
     vape:Remove(v)
 end
 
- 
-local mouseClicked
+ local mouseClicked
 run(function()
 	local SilentAim
 	local Target
@@ -84,6 +83,14 @@ run(function()
 	end
 
 	local Hooks = {
+		FindPartOnRayWithIgnoreList = function(args)
+			local ent, targetPart, origin = getTarget(args[1].Origin, {args[2]})
+			if not ent then return end
+			if Wallbang.Enabled then
+				return {targetPart, targetPart.Position, targetPart.GetClosestPointOnSurface(targetPart, origin), targetPart.Material}
+			end
+			args[1] = Ray.new(origin, CFrame.lookAt(origin, targetPart.Position).LookVector * args[1].Direction.Magnitude)
+		end,
 		Raycast = function(args)
 			if MethodRay.Value ~= 'All' and args[3] and args[3].FilterType ~= Enum.RaycastFilterType[MethodRay.Value] then return end
 			local ent, targetPart, origin = getTarget(args[1])
@@ -92,6 +99,28 @@ run(function()
 			if Wallbang.Enabled then
 				RaycastWhitelist.FilterDescendantsInstances = {targetPart}
 				args[3] = RaycastWhitelist
+			end
+		end,
+		ScreenPointToRay = function(args)
+			local ent, targetPart, origin = getTarget(gameCamera.CFrame.Position)
+			if not ent then return end
+			local direction = CFrame.lookAt(origin, targetPart.Position)
+			if Projectile.Enabled then
+				local calc = prediction.SolveTrajectory(origin, ProjectileSpeed.Value, ProjectileGravity.Value, targetPart.Position, targetPart.Velocity, workspace.Gravity, ent.HipHeight, nil, ProjectileRaycast)
+				if not calc then return end
+				direction = CFrame.lookAt(origin, calc)
+			end
+			return {Ray.new(origin + (args[3] and direction.LookVector * args[3] or Vector3.zero), direction.LookVector)}
+		end,
+		Ray = function(args)
+			local ent, targetPart, origin = getTarget(args[1])
+			if not ent then return end
+			if Projectile.Enabled then
+				local calc = prediction.SolveTrajectory(origin, ProjectileSpeed.Value, ProjectileGravity.Value, targetPart.Position, targetPart.Velocity, workspace.Gravity, ent.HipHeight, nil, ProjectileRaycast)
+				if not calc then return end
+				args[2] = CFrame.lookAt(origin, calc).LookVector * args[2].Magnitude
+			else
+				args[2] = CFrame.lookAt(origin, targetPart.Position).LookVector * args[2].Magnitude
 			end
 		end
 	}
@@ -382,6 +411,7 @@ run(function()
 		Visible = false
 	})
 end)
+
 
 run(function()
     local AFlashbang
