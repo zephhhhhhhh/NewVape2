@@ -398,6 +398,22 @@ run(function()
     })
 end)
 
+												
+run(function()
+    local ASmoke
+    ASmoke = vape.Categories.Utility:CreateModule({
+        Name = "Anti-SmokeGranade",
+        Function = function(callback)
+	  if callback then
+		ASmoke:Toggle()
+		   workspace["Smoke Grenade"]:Destroy()
+	            end
+	        end,
+        Tooltip = "Explodes the smoke granade"
+    })
+end)
+
+													
 run(function()
     local ThirdPerson
     ThirdPerson = vape.Categories.Utility:CreateModule({
