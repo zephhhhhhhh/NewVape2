@@ -30,8 +30,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/onlyabletolove/NewVap
 [Isloving](https://github.com/onlyabletolove) - Developer
 
 
-[Retro](https://github.com/robloxexploiterz) - Exploit Developer
-
 
 <br/>
 
