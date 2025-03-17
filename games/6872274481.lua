@@ -8080,4 +8080,78 @@ run(function()
 		end
 	})
 end)
+
+
+	
+--[[
+
+How to use : 
+
+* Create a new folder in newvape/assets/Sky
+
+* Label said folder the next number (example : 4)
+
+* Add the sky images 
+
+* Add the option in the dropdown
+
+
+! THIS MODULE MAY BE REMOVED IN THE FUTURE IF I DONT LIKE IT !
+
+]]
+
+run(function()
+	local customsky
+	local mode
+	local number = "1"  
+
+	customsky = vape.Categories.Render:CreateModule({
+		Name = 'CustomSky',
+		Function = function(callback)
+			local sky = game:GetService("Lighting"):FindFirstChildOfClass("Sky")
+			if not sky then
+				sky = Instance.new("Sky")
+				sky.Parent = game:GetService("Lighting")
+			end
+
+			if callback then 
+				sky.SkyboxUp = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Top.png")
+				sky.SkyboxLf = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Left.png")
+				sky.SkyboxFt = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Front.png")
+				sky.SkyboxBk = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Back.png")
+				sky.SkyboxDn = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Bottom.png")
+				sky.SkyboxRt = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Right.png")
+			else 
+				sky.SkyboxBk = "rbxassetid://13839120191"
+				sky.SkyboxDn = "rbxassetid://13839122265"
+				sky.SkyboxFt = "rbxassetid://13839117957"
+				sky.SkyboxLf = "rbxassetid://13839116551"
+				sky.SkyboxRt = "rbxassetid://13839097493"
+				sky.SkyboxUp = "rbxassetid://13839112995"
+			end
+		end,
+		Tooltip = 'Uses customasset for the best experience',
+		--[[ExtraText = function()
+			return mode
+		end,]]
+	})
+
+	mode = customsky:CreateDropdown({
+		Name = 'Mode',
+		List = {'DarkBlueNight', 'Itachi', 'Furina'},
+		Function = function(val)
+			if val == 'DarkBlueNight' then
+				number = "1"
+			elseif val == 'Itachi' then
+				number = "2"
+			elseif val == 'Furina' then
+				number = "3"
+			end
+			mode = val
+		end,
+		Tooltip = 'Different modes of the sky'
+	})
+end)
+
+			
  
