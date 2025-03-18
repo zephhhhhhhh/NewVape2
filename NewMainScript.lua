@@ -12,7 +12,7 @@ end
 local function downloadFile(path, func)
 	if not isfile(path) then
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/onlyabletolove/NewVape2/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
+			return game:HttpGet('https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
 		end)
 		if not suc or res == '404: Not Found' then
 			error(res)
@@ -46,7 +46,7 @@ if not isfolder("newvape/assets/new") then
 end
 
 local _, subbed = pcall(function()
-	return game:HttpGet('https://github.com/onlyabletolove/NewVape2')
+	return game:HttpGet('https://github.com/zephhhhhhhh/NewVape2')
 end)
 local commit = subbed:find('currentOid')
 commit = commit and subbed:sub(commit + 13, commit + 52) or nil
@@ -80,7 +80,7 @@ local function downloadAsset(fileName)
     local assetPath = 'newvape/assets/new/' .. fileName
     if not isfile(assetPath) then
         local suc, res = pcall(function()
-            return game:HttpGet('https://raw.githubusercontent.com/onlyabletolove/NewVape2/main/assets/new/' .. fileName, true)
+            return game:HttpGet('https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/assets/new/' .. fileName, true)
         end)
         if suc and res ~= '404: Not Found' then
             writefile(assetPath, res)
