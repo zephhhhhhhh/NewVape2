@@ -67,6 +67,10 @@ for _, v in vape.Modules do
 	end
 end
 
+for _, v in {'AimAssist', 'AutoClicker', 'Reach', 'HitBoxes', 'Killaura', 'MouseTP', 'TargetStrafe', 'Tracers', 'Disabler'} do
+    vape:Remove(v)
+end
+
 run(function()
 	local Sprint
 	local old
