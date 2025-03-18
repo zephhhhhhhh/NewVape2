@@ -11,7 +11,7 @@ end
 local function downloadFile(path, func)
 	if not isfile(path) then
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/onlyabletolove/NewVape2/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
+			return game:HttpGet('https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
 		end)
 		if not suc or res == '404: Not Found' then
 			error(res)
@@ -41,7 +41,7 @@ for _, folder in {'newvape', 'newvape/games', 'newvape/profiles', 'newvape/asset
 end
 
 local _, subbed = pcall(function() 
-	return game:HttpGet('https://github.com/onlyabletolove/NewVape2') 
+	return game:HttpGet('https://github.com/zephhhhhhhh/NewVape2') 
 end)
 local commit = subbed:find('currentOid')
 commit = commit and subbed:sub(commit + 13, commit + 52) or nil
