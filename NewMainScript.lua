@@ -76,11 +76,14 @@ local fileNames = {
     "textv4.png", "textvape.png", "utilityicon.png", "vape.png", "warning.png", "worldicon.png"
 }
 
-local function downloadAsset(fileName)
-    local assetPath = 'newvape/assets/new/' .. fileName
+local skyFolders = {"1", "2", "3"}
+local skies = {"Sky_Back.png", "Sky_Bottom.png", "Sky_Front.png", "Sky_Left.png", "Sky_Right.png", "Sky_Top.png"}
+
+local function downloadAsset(fileName, path)
+    local assetPath = path .. fileName
     if not isfile(assetPath) then
         local suc, res = pcall(function()
-            return game:HttpGet('https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/assets/new/' .. fileName, true)
+            return game:HttpGet('https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/' .. assetPath, true)
         end)
         if suc and res ~= '404: Not Found' then
             writefile(assetPath, res)
@@ -93,8 +96,16 @@ local function downloadAllAssets()
     
     for _, fileName in ipairs(fileNames) do
         table.insert(threads, coroutine.create(function()
-            downloadAsset(fileName)
+            downloadAsset(fileName, 'newvape/assets/new/')
         end))
+    end
+    
+    for _, folder in ipairs(skyFolders) do
+        for _, fileName in ipairs(skies) do
+            table.insert(threads, coroutine.create(function()
+                downloadAsset(fileName, 'newvape/assets/Sky/' .. folder .. '/')
+            end))
+        end
     end
     
     for _, thread in ipairs(threads) do
