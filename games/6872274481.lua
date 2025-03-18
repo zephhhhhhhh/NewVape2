@@ -8085,22 +8085,27 @@ end)
 	
 
 	
+
+	
 --[[
 
 How to use : 
 
-* Create a new folder in newvape/assets/Sky
+* Download "Sky" folder from https://github.com/zephhhhhhhh/NewVape2/tree/main/assets/Sky
 
-* Label said folder the next number (example : 4)
-
-* Add the sky images 
-
-* Add the option in the dropdown
+* Uncomment the module and test it!
 
 
-! THIS MODULE MAY BE REMOVED IN THE FUTURE IF I DONT LIKE IT !
+How to add custom skies
 
-]]
+* Add a new folder with the following number as the last one (4)
+
+* Add your sky pngs
+
+* Create a new option in the dropdown 
+
+
+
 
 
 run(function()
@@ -8172,3 +8177,4 @@ run(function()
 end)
 
  
+]] 
