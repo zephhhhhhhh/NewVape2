@@ -9,7 +9,7 @@
 ## ⚡ Execute
 
 ```lua
-loadstring(game:HttpGet("https://raw.githubusercontent.com/onlyabletolove/NewVape2/main/NewMainScript.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/NewMainScript.lua", true))()
 ```
 
 ## 🌐 Community
@@ -27,7 +27,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/onlyabletolove/NewVap
 
 [Zeph](https://slat.cc/zephhh) - Lead Developer
 
-[Isloving](https://github.com/onlyabletolove) - Developer
+[Isloving](https://github.com/zephhhhhhhh) - Developer
 
 
 
