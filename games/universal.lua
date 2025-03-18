@@ -4254,25 +4254,27 @@ run(function()
 		Tooltip = 'Hides teammates & non targetable entities'
 	})
 end)
-	
+
 run(function()
 	local AnimationPlayer
 	local IDBox
 	local Priority
 	local Speed
 	local anim, animobject
-	
+	local DisableAnimationsState = false
+
 	local function playAnimation(char)
+		if DisableAnimationsState then return end
 		local animcheck = anim
 		if animcheck then
 			anim = nil
 			animcheck:Stop()
 		end
-	
+
 		local suc, res = pcall(function()
 			anim = char.Humanoid.Animator:LoadAnimation(animobject)
 		end)
-	
+
 		if suc then
 			local currentanim = anim
 			anim.Priority = Enum.AnimationPriority[Priority.Value]
@@ -4287,7 +4289,7 @@ run(function()
 			notif('AnimationPlayer', 'failed to load anim : '..(res or 'invalid animation id'), 5, 'warning')
 		end
 	end
-	
+
 	AnimationPlayer = vape.Categories.Utility:CreateModule({
 		Name = 'AnimationPlayer',
 		Function = function(callback)
@@ -4297,7 +4299,13 @@ run(function()
 					return string.match(game:GetObjects('rbxassetid://'..IDBox.Value)[1].AnimationId, '%?id=(%d+)')
 				end)
 				animobject.AnimationId = 'rbxassetid://'..(suc and id or IDBox.Value)
-				
+
+				if DisableAnimationsState then 
+					lplr.Character.Animate.Disabled = true 
+				else
+					lplr.Character.Animate.Disabled = false
+				end 
+
 				if entitylib.isAlive then 
 					playAnimation(entitylib.character) 
 				end
@@ -4311,6 +4319,7 @@ run(function()
 		end,
 		Tooltip = 'Plays a specific animation of your choosing at a certain speed'
 	})
+
 	IDBox = AnimationPlayer:CreateTextBox({
 		Name = 'Animation',
 		Placeholder = 'anim (num only)',
@@ -4321,12 +4330,14 @@ run(function()
 			end
 		end
 	})
+
 	local prio = {'Action4'}
 	for _, v in Enum.AnimationPriority:GetEnumItems() do
 		if v.Name ~= 'Action4' then
 			table.insert(prio, v.Name)
 		end
 	end
+
 	Priority = AnimationPlayer:CreateDropdown({
 		Name = 'Priority',
 		List = prio,
@@ -4336,6 +4347,7 @@ run(function()
 			end
 		end
 	})
+
 	Speed = AnimationPlayer:CreateSlider({
 		Name = 'Speed',
 		Function = function(val)
@@ -4347,7 +4359,22 @@ run(function()
 		Max = 2,
 		Decimal = 10
 	})
+
+	DisableAnimations = AnimationPlayer:CreateToggle({
+		Name = 'Disable Animations',
+		Function = function(state)
+			DisableAnimationsState = state
+			if lplr.Character then
+				lplr.Character.Animate.Disabled = state
+			end
+		end,
+		Default = false,
+		Tooltip = 'Disables animation (like inf yield)'
+	})
 end)
+
+
+				
 	
 run(function()
 	local Blink
