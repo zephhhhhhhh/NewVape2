@@ -60,23 +60,7 @@ end
 writefile('newvape/profiles/commit.txt', commit)
 
 
-local fileNames = {
-    "add.png", "alert.png", "allowedicon.png", "allowedtab.png", "arrowmodule.png",
-    "back.png", "bind.png", "bindbkg.png", "blatanticon.png", "blockedicon.png",
-    "blockedtab.png", "close.png", "closemini.png",
-    "colorpreview.png", "combaticon.png", "customsettings.png", "dots.png", "edit.png",
-    "expandright.png", "expandup.png", "friendstab.png", "guisettings.png", "guislider.png",
-    "guisliderrain.png", "guiv4.png", "guivape.png", "info.png", "inventoryicon.png",
-    "legit.png", "legittab.png", "miniicon.png", "notification.png", "overlaysicon.png",
-    "overlaystab.png", "pin.png", "profilesicon.png", "radaricon.png",
-    "rainbow_1.png", "rainbow_2.png", "rainbow_3.png", "rainbow_4.png",
-    "range.png", "rangearrow.png", "rendericon.png", "rendertab.png", "search.png",
-    "expandicon.png", "targetinfoicon.png", "targetnpc1.png", "targetnpc2.png",
-    "targetplayers1.png", "targetplayers2.png", "targetstab.png", "textguiicon.png",
-    "textv4.png", "textvape.png", "utilityicon.png", "vape.png", "warning.png", "worldicon.png"
-}
-
-local skyFolders = {"1", "2", "3"}
+local skyFolders = {"1", "2", "3"} -- add more here
 local skies = {"Sky_Back.png", "Sky_Bottom.png", "Sky_Front.png", "Sky_Left.png", "Sky_Right.png", "Sky_Top.png"}
 
 local function downloadAsset(fileName, path)
