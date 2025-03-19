@@ -2,7 +2,7 @@
   
   # Zeph's Vape
 
-  <p wowie, a vape fork :O
+ wowie, a vape fork :O
   
 </div>
 
