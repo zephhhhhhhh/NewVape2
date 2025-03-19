@@ -2,8 +2,8 @@
   
   # NewVape2
 
-  <p>A new maintained fork of VapeV4 for Roblox. After the original founder moved on, we've decided to continue the legacy 
-
+  <pOk the whole dev team left me, and im not doing this anymore <3
+  
 </div>
 
 ## ⚡ Execute
