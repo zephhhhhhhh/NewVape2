@@ -6786,7 +6786,10 @@ run(function()
 		Darker = true
 	})
 end)
-	
+
+--[[ 
+
+I just dont care anymore. If you want to fix it go ahead 
 run(function()
 	local Breaker
 	local Range
@@ -7053,7 +7056,10 @@ run(function()
 		Tooltip = 'Only breaks when tools are held'
 	})
 end)
-	
+
+]] 
+
+
 run(function()
 	vape.Legit:CreateModule({
 		Name = 'Clean Kit',
