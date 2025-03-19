@@ -6787,7 +6787,6 @@ run(function()
 	})
 end)
 
- 
 run(function()
 	local Breaker
 	local Range
@@ -6907,29 +6906,33 @@ run(function()
 	local hit = 0
 	
 	local function attemptBreak(tab, localPosition)
-		if not tab then return end
-		for _, v in tab do
-			if (v.Position - localPosition).Magnitude < Range.Value and bedwars.BlockController:isBlockBreakable({blockPosition = v.Position / 3}, lplr) then
-				if not SelfBreak.Enabled and v:GetAttribute('PlacedByUserId') == lplr.UserId then continue end
-				if (v:GetAttribute('BedShieldEndTime') or 0) > workspace:GetServerTimeNow() then continue end
-				if LimitItem.Enabled and not (store.hand.tool and bedwars.ItemMeta[store.hand.tool.Name].breakBlock) then continue end
+		if not tab then return false end
+		
+		for _, v in pairs(tab) do
+			if v and v:IsA("Instance") and v.Position and (v.Position - localPosition).Magnitude < Range.Value then
+				local blockPosition = v.Position / 3
+				if bedwars.BlockController:isBlockBreakable({blockPosition = blockPosition}, lplr) then
+					if not SelfBreak.Enabled and v:GetAttribute('PlacedByUserId') == lplr.UserId then continue end
+					if (v:GetAttribute('BedShieldEndTime') or 0) > workspace:GetServerTimeNow() then continue end
+					if LimitItem.Enabled and not (store.hand.tool and bedwars.ItemMeta[store.hand.tool.Name].breakBlock) then continue end
 	
-				hit += 1
-				local target, path, endpos = bedwars.breakBlock(v, Effect.Enabled, Animation.Enabled, CustomHealth.Enabled and customHealthbar or nil, InstantBreak.Enabled)
-				if path then
-					local currentnode = target
-					for _, part in parts do
-						part.Position = currentnode or Vector3.zero
-						if currentnode then
-							part.BoxHandleAdornment.Color3 = currentnode == endpos and Color3.new(1, 0.2, 0.2) or currentnode == target and Color3.new(0.2, 0.2, 1) or Color3.new(0.2, 1, 0.2)
+					hit += 1
+					local target, path, endpos = bedwars.breakBlock(v, Effect.Enabled, Animation.Enabled, CustomHealth.Enabled and customHealthbar or nil, InstantBreak.Enabled)
+					if path then
+						local currentnode = target
+						for _, part in pairs(parts) do
+							part.Position = currentnode or Vector3.zero
+							if currentnode then
+								part.BoxHandleAdornment.Color3 = currentnode == endpos and Color3.new(1, 0.2, 0.2) or currentnode == target and Color3.new(0.2, 0.2, 1) or Color3.new(0.2, 1, 0.2)
+							end
+							currentnode = path[currentnode]
 						end
-						currentnode = path[currentnode]
 					end
+	
+					task.wait(InstantBreak.Enabled and (store.damageBlockFail > tick() and 4.5 or 0) or 0.25)
+	
+					return true
 				end
-	
-				task.wait(InstantBreak.Enabled and (store.damageBlockFail > tick() and 4.5 or 0) or 0.25)
-	
-				return true
 			end
 		end
 	
@@ -6957,33 +6960,66 @@ run(function()
 					table.insert(parts, part)
 				end
 	
-				local beds = collection('bed', Breaker)
-				local luckyblock = collection('LuckyBlock', Breaker)
-				local ironores = collection('iron-ore', Breaker)
-				customlist = collection('block', Breaker, function(tab, obj)
-					if table.find(Custom.ListEnabled, obj.Name) then
-						table.insert(tab, obj)
-					end
-				end)
-	
-				repeat
-					task.wait(1 / UpdateRate.Value)
-					if not Breaker.Enabled then break end
-					if entitylib.isAlive then
-						local localPosition = entitylib.character.RootPart.Position
-	
-						if attemptBreak(Bed.Enabled and beds, localPosition) then continue end
-						if attemptBreak(customlist, localPosition) then continue end
-						if attemptBreak(LuckyBlock.Enabled and luckyblock, localPosition) then continue end
-						if attemptBreak(IronOre.Enabled and ironores, localPosition) then continue end
-	
-						for _, v in parts do
-							v.Position = Vector3.zero
+				local function updateCollections()
+					local beds = Bed.Enabled and workspace:FindFirstChildOfClass("Folder") and workspace:FindFirstChildOfClass("Folder"):GetDescendants() or {}
+					beds = Bed.Enabled and table.filter(beds, function(obj) return obj.Name:lower():match("bed") end) or {}
+					
+					local luckyblock = LuckyBlock.Enabled and workspace:GetDescendants() or {}
+					luckyblock = LuckyBlock.Enabled and table.filter(luckyblock, function(obj) return obj.Name == "LuckyBlock" end) or {}
+					
+					local ironores = IronOre.Enabled and workspace:GetDescendants() or {}
+					ironores = IronOre.Enabled and table.filter(ironores, function(obj) return obj.Name == "iron-ore" end) or {}
+					
+					local custom = {}
+					if Custom.Enabled and Custom.ListEnabled and #Custom.ListEnabled > 0 then
+						for _, obj in pairs(workspace:GetDescendants()) do
+							if table.find(Custom.ListEnabled, obj.Name) then
+								table.insert(custom, obj)
+							end
 						end
 					end
-				until not Breaker.Enabled
+					
+					return beds, luckyblock, ironores, custom
+				end
+	
+				task.spawn(function()
+					repeat
+						task.wait(1 / UpdateRate.Value)
+						if not Breaker.Enabled then break end
+						if entitylib.isAlive then
+							local localPosition = entitylib.character.RootPart.Position
+							local beds, luckyblock, ironores, customlist = updateCollections()
+	
+							local success = false
+							
+							if Bed.Enabled then
+								success = attemptBreak(beds, localPosition)
+								if success then continue end
+							end
+							
+							if #customlist > 0 then
+								success = attemptBreak(customlist, localPosition)
+								if success then continue end
+							end
+							
+							if LuckyBlock.Enabled then
+								success = attemptBreak(luckyblock, localPosition)
+								if success then continue end
+							end
+							
+							if IronOre.Enabled then
+								success = attemptBreak(ironores, localPosition)
+								if success then continue end
+							end
+	
+							for _, v in pairs(parts) do
+								v.Position = Vector3.zero
+							end
+						end
+					until not Breaker.Enabled
+				end)
 			else
-				for _, v in parts do
+				for _, v in pairs(parts) do
 					v:ClearAllChildren()
 					v:Destroy()
 				end
@@ -7011,13 +7047,6 @@ run(function()
 	Custom = Breaker:CreateTextList({
 		Name = 'Custom',
 		Function = function()
-			if not customlist then return end
-			table.clear(customlist)
-			for _, obj in store.blocks do
-				if table.find(Custom.ListEnabled, obj.Name) then
-					table.insert(customlist, obj)
-				end
-			end
 		end
 	})
 	Bed = Breaker:CreateToggle({
@@ -7054,10 +7083,7 @@ run(function()
 		Tooltip = 'Only breaks when tools are held'
 	})
 end)
-
- 
-
-
+																	
 run(function()
 	vape.Legit:CreateModule({
 		Name = 'Clean Kit',
