@@ -2,7 +2,7 @@
   
   # Zeph's Vape
 
-  <p Ok the whole dev team left me, and im not doing this anymore <3
+  <p wowie, a vape fork :O
   
 </div>
 
