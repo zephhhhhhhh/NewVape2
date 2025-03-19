@@ -31,9 +31,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/
 
 
 
-[Zeph](https://slat.cc/zephhh) - Lead Developer
+[Zeph](https://slat.cc/zephhh) - Developer
 
-[Isloving](https://github.com/zephhhhhhhh) - Developer
 
 
 
@@ -44,5 +43,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/
 [7GrandDad](https://github.com/7GrandDadPGN) - Original Founder
 
 [ILiekCarot](https://github.com/ILiekCarot) - NewVapeV2 Founder
+
+[Isloving](https://github.com/onlyabletolove) - Previous Developer
 
 [Stav](https://github.com/sstvskids/VapeV4ForRoblox) - Found the base fixed remote/controller paths
