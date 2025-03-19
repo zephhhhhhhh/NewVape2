@@ -4,8 +4,12 @@
 
  wowie, a vape fork :O
 
-Im not going to keep working on "NewVapeV2" anymore because everyone else gave up. Ill still update it and "maintain" it but it wont be the same quality. And it will certainly not live up to **Vape**
-  
+Im not going to keep working on "NewVapeV2" anymore because everyone else gave up. Ill still update it and "maintain" it but it wont be the same quality and it will certainly not live up to **Vape**
+
+Everything (for the most part) works fine, but if anything breaks that isnt related to skywars (bedwars) then I could really careless.
+
+Im mainly going to keep this up for anyone who wants to create their own config but do not want to fix any of vape's current errors.
+
 </div>
 
 ## ⚡ Execute
