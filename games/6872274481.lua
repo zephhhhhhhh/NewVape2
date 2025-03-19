@@ -6978,7 +6978,10 @@ run(function()
 							
 							local success = false
 							
+							-- Fix for bed breaking - prioritize beds and ensure they're properly processed
 							if Bed.Enabled then
+								-- Refresh beds collection to ensure we have the latest beds
+								beds = collection('bed', Breaker)
 								success = attemptBreak(beds, localPosition)
 								if success then continue end
 							end
