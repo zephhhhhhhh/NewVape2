@@ -2,7 +2,7 @@
   
   # NewVape2
 
-  <pOk the whole dev team left me, and im not doing this anymore <3
+  <p Ok the whole dev team left me, and im not doing this anymore <3
   
 </div>
 
