@@ -6960,27 +6960,14 @@ run(function()
 					table.insert(parts, part)
 				end
 	
-				local function updateCollections()
-					local beds = Bed.Enabled and workspace:FindFirstChildOfClass("Folder") and workspace:FindFirstChildOfClass("Folder"):GetDescendants() or {}
-					beds = Bed.Enabled and table.filter(beds, function(obj) return obj.Name:lower():match("bed") end) or {}
-					
-					local luckyblock = LuckyBlock.Enabled and workspace:GetDescendants() or {}
-					luckyblock = LuckyBlock.Enabled and table.filter(luckyblock, function(obj) return obj.Name == "LuckyBlock" end) or {}
-					
-					local ironores = IronOre.Enabled and workspace:GetDescendants() or {}
-					ironores = IronOre.Enabled and table.filter(ironores, function(obj) return obj.Name == "iron-ore" end) or {}
-					
-					local custom = {}
-					if Custom.Enabled and Custom.ListEnabled and #Custom.ListEnabled > 0 then
-						for _, obj in pairs(workspace:GetDescendants()) do
-							if table.find(Custom.ListEnabled, obj.Name) then
-								table.insert(custom, obj)
-							end
-						end
+				local beds = collection('bed', Breaker)
+				local luckyblock = collection('LuckyBlock', Breaker)
+				local ironores = collection('iron-ore', Breaker)
+				customlist = collection('block', Breaker, function(tab, obj)
+					if table.find(Custom.ListEnabled, obj.Name) then
+						table.insert(tab, obj)
 					end
-					
-					return beds, luckyblock, ironores, custom
-				end
+				end)
 	
 				task.spawn(function()
 					repeat
@@ -6988,8 +6975,7 @@ run(function()
 						if not Breaker.Enabled then break end
 						if entitylib.isAlive then
 							local localPosition = entitylib.character.RootPart.Position
-							local beds, luckyblock, ironores, customlist = updateCollections()
-	
+							
 							local success = false
 							
 							if Bed.Enabled then
@@ -6997,7 +6983,7 @@ run(function()
 								if success then continue end
 							end
 							
-							if #customlist > 0 then
+							if customlist and #customlist > 0 then
 								success = attemptBreak(customlist, localPosition)
 								if success then continue end
 							end
@@ -7047,6 +7033,13 @@ run(function()
 	Custom = Breaker:CreateTextList({
 		Name = 'Custom',
 		Function = function()
+			if not customlist then return end
+			table.clear(customlist)
+			for _, obj in store.blocks do
+				if table.find(Custom.ListEnabled, obj.Name) then
+					table.insert(customlist, obj)
+				end
+			end
 		end
 	})
 	Bed = Breaker:CreateToggle({
@@ -7083,23 +7076,7 @@ run(function()
 		Tooltip = 'Only breaks when tools are held'
 	})
 end)
-																	
-run(function()
-	vape.Legit:CreateModule({
-		Name = 'Clean Kit',
-		Function = function(callback)
-			if callback then
-				bedwars.WindWalkerController.spawnOrb = function() end
-				local zephyreffect = lplr.PlayerGui:FindFirstChild('WindWalkerEffect', true)
-				if zephyreffect then 
-					zephyreffect.Visible = false 
-				end
-			end
-		end,
-		Tooltip = 'Removes zephyr status indicator'
-	})
-end)
-	
+
 run(function()
 	local old
 	local Image
