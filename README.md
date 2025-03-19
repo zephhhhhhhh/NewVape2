@@ -4,7 +4,7 @@
 
  wowie, a vape fork :O
 
-Im not going to keep working on "NewVapeV2" anymore because everyone else gave up. Ill still update it and "maintain" it but it wont be the same quality. And it will certainly not live up to ###Vape
+Im not going to keep working on "NewVapeV2" anymore because everyone else gave up. Ill still update it and "maintain" it but it wont be the same quality. And it will certainly not live up to **Vape**
   
 </div>
 
