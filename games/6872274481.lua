@@ -8280,16 +8280,6 @@ end)
 
 	
 
-	
---[[
-
-Thank you cryingman for improving this module for me, without him i could not do this 
-
-
-1. Download the repo and drag sky into newvape
-2. Uncomment this module
-
-I will be adding autodownload in the next update!!
 
 run(function()
     local customsky
@@ -8375,4 +8365,3 @@ end)
 
 
  
-]] 
