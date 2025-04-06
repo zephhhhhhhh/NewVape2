@@ -102,6 +102,37 @@ local function downloadAllAssets()
     end
 end
 
+-- sky part here, yes i did rewrite the whole thing. And yes i dont give a shit about making it automatic anymore 
+local pngs = {
+    "Sky_Back.png", "Sky_Bottom.png", "Sky_Front.png", "Sky_Left.png", "Sky_Right.png", "Sky_Top.png"
+}
+
+local Skies = {
+    "Bloodshed", "BlueNight", "SimpleBlue", "Uwu"
+}
+
+local function downloads(path, png)
+    local filePath = 'newvape/assets/Sky/' .. path .. '/' .. png
+    if not isfile(filePath) then
+        local suc, res = pcall(function()
+            return game:HttpGet('https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/assets/Sky/' .. path .. '/' .. png, true)
+        end)
+        if suc and res ~= '404: Not Found' then
+            writefile(filePath, res)
+        end
+    end
+end
+
+local function downloadsky()
+    for _, sky in ipairs(Skies) do
+        for _, png in ipairs(pngs) do
+            downloads(sky, png)
+        end
+    end
+end
+
+
+downloadsky()
 downloadAllAssets()
 
 
