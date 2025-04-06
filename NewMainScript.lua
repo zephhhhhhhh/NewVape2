@@ -102,6 +102,43 @@ local function downloadAllAssets()
     end
 end
 
+local function skies(path)
+    local url = 'https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/assets/Sky/' .. path
+    local suc, res = pcall(function()
+        return game:HttpGet(url, true)
+    end)
+    return suc and res or nil
+end
+
+
+-- experimental 
+local function downloadsky(name, path)
+    local assetPath = 'newvape/assets/Sky/' .. path .. '/' .. name
+    if not isfile(assetPath) then
+        local suc, res = pcall(function()
+            return game:HttpGet('https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/assets/Sky/' .. path .. '/' .. name, true)
+        end)
+        if suc and res ~= '404: Not Found' then
+            writefile(assetPath, res)
+        end
+    end
+end
+
+local function downloadsky(path)
+    local skypngs = skies(path)
+    if skypngs then
+        for _, name in ipairs(skypngs) do
+            downloadsky(name, path)
+        end
+        for _, subFolder in ipairs(skypngs) do
+            if subFolder:match('/$') then
+                downloadsky(path .. '/' .. subFolder)
+            end
+        end
+    end
+end
+
+downloadsky('Sky')
 downloadAllAssets()
 
 

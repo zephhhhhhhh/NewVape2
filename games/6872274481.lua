@@ -8306,7 +8306,7 @@ run(function()
             end
         end
     else
-        notif('Vape', 'Download the "sky" folder from the repo', 5, 'warning')
+        notif('Vape', 'Poop exploit. Download the "sky" folder from the repo', 5, 'warning')
     end
 
     local skyList = {}
