@@ -26,9 +26,13 @@ local starterGui = cloneref(game:GetService('StarterGui'))
 local isnetworkowner = identifyexecutor and table.find({'AWP', 'Nihon'}, ({identifyexecutor()})[1]) and isnetworkowner or function()
 	return true
 end
+
 local gameCamera = workspace.CurrentCamera
+local cam = gameCamera -- i like cam more then game camera but i dont want to mess up old vape code
 local lplr = playersService.LocalPlayer
 local assetfunction = getcustomasset
+local char = lplr.Character 
+local hrp = char.HumanoidRootPart
 
 local vape = shared.vape
 local entitylib = vape.Libraries.entity
@@ -1392,10 +1396,12 @@ run(function()
 	})
 end)
 	
+
 run(function()
 	local Sprint
+	local SprintLegit = {Enabled = false}
 	local old
-	
+
 	Sprint = vape.Categories.Combat:CreateModule({
 		Name = 'Sprint',
 		Function = function(callback)
@@ -1405,17 +1411,36 @@ run(function()
 						lplr.PlayerGui.MobileUI['4'].Visible = false 
 					end) 
 				end
+
 				old = bedwars.SprintController.stopSprinting
 				bedwars.SprintController.stopSprinting = function(...)
 					local call = old(...)
-					bedwars.SprintController:startSprinting()
+					if not SprintLegit.Enabled or (lplr.Character and lplr.Character:FindFirstChild("Humanoid") and lplr.Character.Humanoid.MoveDirection.Magnitude > 0) then
+						bedwars.SprintController:startSprinting()
+					end
 					return call
 				end
-				Sprint:Clean(entitylib.Events.LocalAdded:Connect(function() 
-					task.delay(0.1, function() 
-						bedwars.SprintController:stopSprinting() 
-					end) 
+
+				Sprint:Clean(runService.RenderStepped:Connect(function()
+					if lplr.Character and lplr.Character:FindFirstChild("Humanoid") then
+						if SprintLegit.Enabled then
+							if lplr.Character.Humanoid.MoveDirection.Magnitude > 0 then
+								bedwars.SprintController:startSprinting()
+							else
+								bedwars.SprintController:stopSprinting()
+							end
+						else
+							bedwars.SprintController:startSprinting()
+						end
+					end
 				end))
+
+				Sprint:Clean(entitylib.Events.LocalAdded:Connect(function()
+					task.delay(0.1, function()
+						bedwars.SprintController:stopSprinting()
+					end)
+				end))
+
 				bedwars.SprintController:stopSprinting()
 			else
 				if inputService.TouchEnabled then 
@@ -1428,6 +1453,11 @@ run(function()
 			end
 		end,
 		Tooltip = 'Sets your sprinting to true.'
+	})
+
+	SprintLegit = Sprint:CreateToggle({
+		Name = 'Legit',
+		Default = false
 	})
 end)
 	
@@ -7228,15 +7258,37 @@ run(function()
 end)
 	
 	
+
+
 run(function()
-	local CameraFix = vape.Legit:CreateModule({
+	CameraFix = vape.Categories.Minigames:CreateModule({
         Name = "CameraFix",
         Function = function(callback)
             if callback then
                 task.spawn(function()
                     while CameraFix.Enabled do
-                        if lplr.Character and lplr.Character:FindFirstChild("HumanoidRootPart") then
-                            cam.CFrame = CFrame.new(cam.CFrame.Position, cam.CFrame.Position + lplr.Character.HumanoidRootPart.CFrame.LookVector)
+                        if char and hrp then
+                            gameCamera.CFrame = CFrame.new(gameCamera.CFrame.Position, hrp.Position + hrp.CFrame.LookVector)
+                        end
+                        task.wait()
+                    end
+                end)
+            end
+        end,
+        Tooltip = "translation layer"
+    })
+end)
+
+
+run(function()
+     CameraFix = vape.Legit:CreateModule({
+        Name = "CameraFix",
+        Function = function(callback)
+            if callback then
+                task.spawn(function()
+                    while CameraFix.Enabled do
+                        if char and hrp then
+                            gameCamera.CFrame = CFrame.new(gameCamera.CFrame.Position, hrp.Position + hrp.CFrame.LookVector)
                         end
                         task.wait()
                     end
@@ -8231,30 +8283,37 @@ end)
 	
 --[[
 
-How to use : 
-
-* Download "Sky" folder from https://github.com/zephhhhhhhh/NewVape2/tree/main/assets/Sky
-
-* Uncomment the module and test it!
+Thank you cryingman for improving this module for me, without him i could not do this 
 
 
-How to add custom skies
+1. Download the repo and drag sky into newvape
+2. Uncomment this module
 
-* Add a new folder with the following number as the last one (4)
-
-* Add your sky pngs
-
-* Create a new option in the dropdown 
-
-Video : https://youtu.be/YH7O9YwYvbQ
-
-
+I will be adding autodownload in the next update!!
 
 run(function()
     local customsky
     local mode
-    local number = "1"  
-    
+    local number = "1"
+
+    local skies = {}
+
+    if isfolder("newvape/assets/sky") then
+        for _, folder in ipairs(listfiles("newvape/assets/sky")) do
+            if isfolder(folder) then
+                local name = folder:match("([^/\\]+)$")
+                skies[name] = name
+            end
+        end
+    else
+        notif('Vape', 'Download the "sky" folder from the repo', 5, 'warning')
+    end
+
+    local skyList = {}
+    for name in pairs(skies) do
+        table.insert(skyList, name)
+    end
+
     customsky = vape.Categories.Render:CreateModule({
         Name = 'CustomSky',
         Function = function(callback)
@@ -8264,19 +8323,20 @@ run(function()
                 sky.Parent = game:GetService("Lighting")
             end
 
-            if callback then 
+            if callback then
                 if not isfolder("newvape/assets/sky") then
                     notif('Vape', 'Poop exploit. Download the "sky" folder from the repo', 5, 'warning')
                     return
-                end 
+                end
 
-                sky.SkyboxUp = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Top.png")
-                sky.SkyboxLf = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Left.png")
-                sky.SkyboxFt = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Front.png")
-                sky.SkyboxBk = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Back.png")
-                sky.SkyboxDn = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Bottom.png")
-                sky.SkyboxRt = getcustomasset("newvape/assets/Sky/" .. number .. "/Sky_Right.png")
-            else 
+                local path = "newvape/assets/sky/" .. number .. "/"
+                sky.SkyboxUp = getcustomasset(path .. "Sky_Top.png")
+                sky.SkyboxLf = getcustomasset(path .. "Sky_Left.png")
+                sky.SkyboxFt = getcustomasset(path .. "Sky_Front.png")
+                sky.SkyboxBk = getcustomasset(path .. "Sky_Back.png")
+                sky.SkyboxDn = getcustomasset(path .. "Sky_Bottom.png")
+                sky.SkyboxRt = getcustomasset(path .. "Sky_Right.png")
+            else
                 sky.SkyboxBk = "rbxassetid://13839120191"
                 sky.SkyboxDn = "rbxassetid://13839122265"
                 sky.SkyboxFt = "rbxassetid://13839117957"
@@ -8290,19 +8350,14 @@ run(function()
 
     mode = customsky:CreateDropdown({
         Name = 'Mode',
-        List = {'DarkBlueNight', 'Itachi', 'Furina'},
+        List = skyList,
         Function = function(val)
-            if val == 'DarkBlueNight' then
-                number = "1"
-            elseif val == 'Itachi' then
-                number = "2"
-            elseif val == 'Furina' then
-                number = "3"
-            end
+            number = skies[val] or "1"
             mode = val
         end,
         Tooltip = 'Different modes of the sky'
     })
+
     local showmode = customsky:CreateToggle({
         Name = 'Show Mode',
         Default = false,
@@ -8317,6 +8372,7 @@ run(function()
         end
     })
 end)
+
 
  
 ]] 
