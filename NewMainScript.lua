@@ -112,6 +112,20 @@ end
 
 
 -- experimental 
+local function skies(path)
+    local url = 'https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/assets/Sky/' .. path
+    local suc, res = pcall(function()
+        return game:HttpGet(url, true)
+    end)
+    if suc and res then
+        local success, json = pcall(function() return game:GetService('HttpService'):JSONDecode(res) end)
+        if success and type(json) == "table" then
+            return json
+        end
+    end
+    return nil
+end
+
 local function downloadsky(name, path)
     local assetPath = 'newvape/assets/Sky/' .. path .. '/' .. name
     if not isfile(assetPath) then
