@@ -135,3 +135,153 @@ run(function()
 	})
 end)
 	
+
+
+
+run(function()
+    local sslot = "1"
+    local emoted = ""
+    local emoteIDs = {}
+    local pre = false
+
+    if bedwars and bedwars.EmoteMeta then
+        for i, emote in pairs(bedwars.EmoteMeta) do
+            emoteIDs[emote.name] = i
+        end
+    end
+
+    SetEmote = vape.Categories.Minigames:CreateModule({
+        Name = "SetEmote",
+        Function = function(callback)
+            if callback then
+                if pre then
+                    lplr:SetAttribute("emote_slot_1", "nightmare_1")
+                    lplr:SetAttribute("EmoteTypeSlot1", "nightmare_1")
+
+                    lplr:SetAttribute("emote_slot_2", "griddy")
+                    lplr:SetAttribute("EmoteTypeSlot2", "griddy")
+
+                    lplr:SetAttribute("emote_slot_3", "funky_dance")
+                    lplr:SetAttribute("EmoteTypeSlot3", "funky_dance")
+
+                    lplr:SetAttribute("emote_slot_4", "tournament_winner")
+                    lplr:SetAttribute("EmoteTypeSlot4", "tournament_winner")
+
+                    lplr:SetAttribute("emote_slot_5", "top_assassin")
+                    lplr:SetAttribute("EmoteTypeSlot5", "top_assassin")
+
+                    lplr:SetAttribute("emote_slot_6", "disco_dance")
+                    lplr:SetAttribute("EmoteTypeSlot6", "disco_dance")
+
+                    lplr:SetAttribute("emote_slot_7", "rage_blade")
+                    lplr:SetAttribute("EmoteTypeSlot7", "rage_blade")
+                elseif emoted and sslot then
+                    local emoteID = emoteIDs[emoted]
+                    local slot = tonumber(sslot)
+
+                    if emoteID and slot then
+                        lplr:SetAttribute("emote_slot_" .. tostring(slot), emoteID)
+                        lplr:SetAttribute("EmoteTypeSlot" .. tostring(slot), emoteID)
+                    end
+                end
+            end
+        end,
+        Tooltip = "SetEmote v2"
+    })
+
+    Emote = SetEmote:CreateTextBox({
+        Name = "Emote",
+        Placeholder = "emote id (ex : nightmare_1)",
+        Function = function(enter)
+            emoted = enter
+        end
+    })
+
+    Slot = SetEmote:CreateTextBox({
+        Name = "Slot",
+        Placeholder = "1 - 7",
+        Function = function(enter)
+            sslot = enter
+        end
+    })
+
+    Preset = SetEmote:CreateToggle({
+        Name = "Preset",
+        Default = false,
+        Function = function(val)
+            pre = val
+        end
+    })
+end)
+
+
+-- shitter ver of autoqueue from old vape. 
+
+run(function()
+    local delay = 2
+    local mode = ""
+    local enabled = false
+    local firstqueue = true
+
+    local queues = {
+        ["skywars"] = "skywars_to2",
+        ["solos"] = "bedwars_to1",
+        ["duos"] = "bedwars_to2",
+        ["5v5"] = "bedwars_5v5"
+    }
+
+    AutoQueue = vape.Categories.Minigames:CreateModule({
+        Name = "AutoQueue",
+        Function = function(callback)
+            enabled = callback
+            if callback then
+                task.spawn(function()
+                    repeat
+                        task.wait(delay)
+                        firstqueue = false
+
+                        if shared.vapeteammembers and bedwars.ClientStoreHandler:getState().Party then
+                            repeat task.wait() until #bedwars.ClientStoreHandler:getState().Party.members >= shared.vapeteammembers or not enabled
+                        end
+
+                        if enabled and mode ~= "" then
+                            local args = {
+                                [1] = {
+                                    queueType = queues[mode]
+                                }
+                            }
+                            replicatedStorage:FindFirstChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events").joinQueue:FireServer(unpack(args))
+                        end
+                    until not enabled
+                end)
+            else
+                firstqueue = false
+                shared.vapeteammembers = nil
+                replicatedStorage:FindFirstChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events").leaveQueue:FireServer()
+            end
+        end,
+        Tooltip = "AutoQueue"
+    })
+
+    Mode = AutoQueue:CreateDropdown({
+        Name = "Mode",
+        List = {"skywars", "solos", "duos", "5v5"},
+        Function = function(val)
+            mode = val
+            if enabled and not firstqueue then
+                AutoQueue.ToggleButton(false)
+                AutoQueue.ToggleButton(true)
+            end
+        end
+    })
+
+    Delay = AutoQueue:CreateSlider({
+        Name = "Delay",
+        Min = 1,
+        Max = 20,
+        Default = 2,
+        Function = function(val)
+            delay = val
+        end
+    })
+end)

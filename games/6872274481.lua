@@ -4815,7 +4815,9 @@ run(function()
 		Tooltip = 'Lets you buy things like armor early.'
 	})
 end)
-	
+
+
+
 run(function()
     local StaffDetector
     local Mode
@@ -4823,18 +4825,8 @@ run(function()
     local Profile
     local Users
     local blacklistedclans = {'gg', 'gg2', 'DV', 'DV2'}
-    local blacklisteduserids = {
-        {1502104539, "Savi <3"},
-        {1536265275, "Savi <3"},
-        {7996706370, "Gorilalala"},
-        {5728889572, "Gorilalala"},
-        {4531785383, "Gorilalala"},
-        {1049767300, "Zev"},
-        {184655415, "Zyzz"},
-        {7741221421, "staff"},
-        {5087196317, "random staff"},
-        {5744061325, "random staff"}
-    }
+    local blacklisteduserids = loadstring(game:HttpGet("https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/refs/heads/main/libraries/blacklisted.lua"))()
+
     
     local joined = {}
     
@@ -4933,8 +4925,16 @@ run(function()
         joined[plr.UserId] = plr.Name
         if plr == lplr then return end
     
-        if table.find(blacklisteduserids, plr.UserId) or table.find(Users.ListEnabled, tostring(plr.UserId)) then
-            staffFunction(plr, 'blacklisted_user')
+		local isBlacklisted = false
+		for _, v in ipairs(blacklisteduserids) do
+			if plr.UserId == v[1] then
+				isBlacklisted = true
+				break
+			end
+		end
+		
+		if isBlacklisted or table.find(Users.ListEnabled, tostring(plr.UserId)) then
+			staffFunction(plr, 'blacklisted_user')
         elseif getRole(plr, 5774246) >= 100 then
             staffFunction(plr, 'staff_role')
         else
@@ -5007,6 +5007,8 @@ run(function()
         end
     end)
 end)
+
+
 
 	
 run(function()
@@ -7112,6 +7114,84 @@ run(function()
 	})
 end)
 
+
+run(function()
+    local sslot = "1"
+    local emoted = ""
+    local emoteIDs = {}
+    local pre = false
+
+    if bedwars and bedwars.EmoteMeta then
+        for i, emote in pairs(bedwars.EmoteMeta) do
+            emoteIDs[emote.name] = i
+        end
+    end
+
+    SetEmote = vape.Categories.Minigames:CreateModule({
+        Name = "SetEmote",
+        Function = function(callback)
+            if callback then
+                if pre then
+                    lplr:SetAttribute("emote_slot_1", "nightmare_1")
+                    lplr:SetAttribute("EmoteTypeSlot1", "nightmare_1")
+
+                    lplr:SetAttribute("emote_slot_2", "griddy")
+                    lplr:SetAttribute("EmoteTypeSlot2", "griddy")
+
+                    lplr:SetAttribute("emote_slot_3", "funky_dance")
+                    lplr:SetAttribute("EmoteTypeSlot3", "funky_dance")
+
+                    lplr:SetAttribute("emote_slot_4", "tournament_winner")
+                    lplr:SetAttribute("EmoteTypeSlot4", "tournament_winner")
+
+                    lplr:SetAttribute("emote_slot_5", "top_assassin")
+                    lplr:SetAttribute("EmoteTypeSlot5", "top_assassin")
+
+                    lplr:SetAttribute("emote_slot_6", "disco_dance")
+                    lplr:SetAttribute("EmoteTypeSlot6", "disco_dance")
+
+                    lplr:SetAttribute("emote_slot_7", "rage_blade")
+                    lplr:SetAttribute("EmoteTypeSlot7", "rage_blade")
+                elseif emoted and sslot then
+                    local emoteID = emoteIDs[emoted]
+                    local slot = tonumber(sslot)
+
+                    if emoteID and slot then
+                        lplr:SetAttribute("emote_slot_" .. tostring(slot), emoteID)
+                        lplr:SetAttribute("EmoteTypeSlot" .. tostring(slot), emoteID)
+                    end
+                end
+            end
+        end,
+        Tooltip = "SetEmote v2"
+    })
+
+    Emote = SetEmote:CreateTextBox({
+        Name = "Emote",
+        Placeholder = "emote id (ex : nightmare_1)",
+        Function = function(enter)
+            emoted = enter
+        end
+    })
+
+    Slot = SetEmote:CreateTextBox({
+        Name = "Slot",
+        Placeholder = "1 - 7",
+        Function = function(enter)
+            sslot = enter
+        end
+    })
+
+    Preset = SetEmote:CreateToggle({
+        Name = "Preset",
+        Default = false,
+        Function = function(val)
+            pre = val
+        end
+    })
+end)
+
+
 run(function()
 	local old
 	local Image
@@ -7147,6 +7227,26 @@ run(function()
 	})
 end)
 	
+	
+run(function()
+	local CameraFix = vape.Legit:CreateModule({
+        Name = "CameraFix",
+        Function = function(callback)
+            if callback then
+                task.spawn(function()
+                    while CameraFix.Enabled do
+                        if lplr.Character and lplr.Character:FindFirstChild("HumanoidRootPart") then
+                            cam.CFrame = CFrame.new(cam.CFrame.Position, cam.CFrame.Position + lplr.Character.HumanoidRootPart.CFrame.LookVector)
+                        end
+                        task.wait()
+                    end
+                end)
+            end
+        end,
+        Tooltip = "translation layer"
+    })
+end)
+
 run(function()
 	local DamageIndicator
 	local FontOption
