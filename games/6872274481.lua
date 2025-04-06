@@ -31,8 +31,8 @@ local gameCamera = workspace.CurrentCamera
 local cam = gameCamera -- i like cam more then game camera but i dont want to mess up old vape code
 local lplr = playersService.LocalPlayer
 local assetfunction = getcustomasset
-local char = lplr.Character 
-local hrp = char.HumanoidRootPart
+local char = lplr.Character or lplr.CharacterAdded:Wait() -- ty for this beautiful addition 
+local hrp = char:WaitForChild("HumanoidRootPart")
 
 local vape = shared.vape
 local entitylib = vape.Libraries.entity
