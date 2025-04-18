@@ -102,37 +102,32 @@ local function downloadAllAssets()
     end
 end
 
--- sky part here, yes i did rewrite the whole thing. And yes i dont give a shit about making it automatic anymore 
+--[[
+Trying this maybe it wil work? I did not make this, it was given to me 
+]]
 local pngs = {
-    "Sky_Back.png", "Sky_Bottom.png", "Sky_Front.png", "Sky_Left.png", "Sky_Right.png", "Sky_Top.png"
+    "Sky_Back.png", "Sky_Bottom.png", "Sky_Front.png",
+    "Sky_Left.png", "Sky_Right.png", "Sky_Top.png"
 }
 
-local Skies = {
+local skies = {
     "Bloodshed", "BlueNight", "SimpleBlue", "Uwu"
 }
 
-local function downloads(path, png)
-    local filePath = 'newvape/assets/Sky/' .. path .. '/' .. png
-    if not isfile(filePath) then
-        local suc, res = pcall(function()
-            return game:HttpGet('https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/assets/Sky/' .. path .. '/' .. png, true)
-        end)
-        if suc and res ~= '404: Not Found' then
-            writefile(filePath, res)
+for _, sky in ipairs(skies) do
+    for _, png in ipairs(pngs) do
+        local path = 'newvape/assets/Sky/' .. sky .. '/' .. png
+        if not isfile(path) then
+            local success, content = pcall(function()
+                return game:HttpGet('https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/assets/Sky/' .. sky .. '/' .. png, true)
+            end)
+            if success and content and not content:find("404: Not Found") then
+                writefile(path, content)
+            end
         end
     end
 end
 
-local function downloadsky()
-    for _, sky in ipairs(Skies) do
-        for _, png in ipairs(pngs) do
-            downloads(sky, png)
-        end
-    end
-end
-
-
-downloadsky()
 downloadAllAssets()
 
 
