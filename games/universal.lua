@@ -5851,8 +5851,6 @@ run(function()
                 skies[name] = name
             end
         end
-    else
-        notif('Vape', 'Poop exploit. Download the "sky" folder from the repo', 5, 'warning')
     end
 
     local skyList = {}
