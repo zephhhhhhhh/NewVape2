@@ -6019,7 +6019,7 @@ run(function()
 end)
 
 local Time = (string.format("%."..tostring(Decimals).."f", os.clock() - Clock))
-loadstring(game:HttpGet("https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/libraries/version.lua, true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/libraries/version.lua", true))()
 SendWarn("NewVape loaded | version : " .. _G.vapeVersion, white)
 SendWarn("Loaded in : " .. tostring(Time), green)
 
