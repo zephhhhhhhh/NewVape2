@@ -33,6 +33,7 @@ local lplr = playersService.LocalPlayer
 local assetfunction = getcustomasset
 local char = lplr.Character or lplr.CharacterAdded:Wait() -- ty for this beautiful addition 
 local hrp = char:WaitForChild("HumanoidRootPart")
+local hum = char:FindFirstChildOfClass('Humanoid')
 
 local vape = shared.vape
 local entitylib = vape.Libraries.entity
@@ -2899,6 +2900,7 @@ run(function()
 		Default = 9
 	})
 end)
+
 	
 run(function()
 	local old
