@@ -39,6 +39,24 @@ local cloneref = cloneref or function(obj)
 	return obj
 end
 
+
+-- could I improve this?
+-- yes
+-- will i?
+-- no 
+
+local red = "255, 0, 0"
+local white = "255, 255, 255"
+local green = "0, 255, 0"
+
+local function SendWarn(text, color)
+	if typeof(text) ~= "string" or typeof(color) ~= "string" then return end
+	local channel = game.TextChatService:FindFirstChild("TextChannels") and game.TextChatService.TextChannels:FindFirstChild("RBXSystem")
+	if channel then
+		channel:DisplaySystemMessage('<font color="rgb(' .. color .. ')">' .. text .. '</font>')
+	end
+end
+
 local playersService = cloneref(game:GetService('Players'))
 local replicatedStorage = cloneref(game:GetService('ReplicatedStorage'))
 local runService = cloneref(game:GetService('RunService'))
@@ -53,6 +71,8 @@ local groupService = cloneref(game:GetService('GroupService'))
 local textChatService = cloneref(game:GetService('TextChatService'))
 local contextService = cloneref(game:GetService('ContextActionService'))
 local coreGui = cloneref(game:GetService('CoreGui'))
+local Decimals = 4
+local Clock = os.clock()
 
 local isnetworkowner = (typeof(isnetworkowner) == "function") and isnetworkowner or function()
     return true
@@ -5997,3 +6017,9 @@ run(function()
 	    capePlayer(plr)
 	end
 end)
+
+local Time = (string.format("%."..tostring(Decimals).."f", os.clock() - Clock))
+loadstring(game:HttpGet("https://raw.githubusercontent.com/zephhhhhhhh/NewVape2/main/libraries/version.lua, true))()
+SendWarn("NewVape loaded | version : " .. _G.vapeVersion, white)
+SendWarn("Loaded in : " .. tostring(Time), green)
+
